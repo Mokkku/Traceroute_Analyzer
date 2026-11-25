@@ -238,7 +238,7 @@ def generate_output(src, dst, routers, protos, fc, f_off, rtts, ult_rtts):
 
 
 if __name__ == '__main__':
-    filename = "traceroute-frag.pcap"
+    filename = input("Input the name of the .pcap file to be analyzed: ")
     endian_format, file_obj, is_nano = parse_global_header(filename)
     
     if file_obj:
