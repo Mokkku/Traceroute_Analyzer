@@ -235,9 +235,7 @@ def generate_output(src, dst, routers, protos, fc, f_off, rtts, ult_rtts):
         sd_str = f"{sd_ult:g}"
         print(f"The svg Rtt between {src} and {dst} if: {mean_str} ms, the s.d. is: {sd_str} ms")
 
-
-
-if __name__ == '__main__':
+def main():
     filename = input("Input the name of the .pcap file to be analyzed: ")
     endian_format, file_obj, is_nano = parse_global_header(filename)
     
@@ -247,3 +245,6 @@ if __name__ == '__main__':
 
         src,dst, routers, protos, fc, f_off, rtts, ult_rtts = analyze_traceroute(parsed_packets)
         generate_output(src, dst, routers, protos, fc, f_off, rtts, ult_rtts)
+
+if __name__ == '__main__':
+    main()
