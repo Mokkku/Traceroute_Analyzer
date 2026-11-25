@@ -61,7 +61,7 @@ def process_packets(file, endian_format, is_nano):
         if orig_time is None:
                 orig_time = abs_time
 
-        packet_data = file_obj.read(incl_len)
+        packet_data = file.read(incl_len)
 
         parsed = parse_traceroute_packet(packet_data, packet_count, packet_header[0:4], packet_header[4:8], orig_time)
 
