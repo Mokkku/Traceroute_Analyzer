@@ -1,5 +1,4 @@
 import struct
-import os
 
 def parse_r2_pcap(filename):
 
@@ -60,16 +59,19 @@ def parse_r2_pcap(filename):
             source_node = src_ip
 
         if src_ip == source_node:
-            ttl_counts[ttl] = ttl_counts.get(ttl, 0) + 1
-
             if protocol == 17 and len(packet_data) >= payload_start + 4:
                 src_port = struct.unpack('>H', packet_data[payload_start: payload_start + 2])[0]
                 if 33434 <= struct.unpack('>H', packet_data[payload_start + 2:payload_start + 4])[0] <= 33529:
-                    if src_port not in probes_sent: probes_sent[src_port] = {'times': [], 'ttl': ttl}
+                    ttl_counts[ttl] = ttl_counts.get(ttl, 0) + 1
+                    if src_port not in probes_sent: 
+                        probes_sent[src_port] = {'times': [], 'ttl': ttl}
                     probes_sent[src_port]['times'].append(absolute_time)
+
             elif protocol == 1 and packet_data[payload_start] == 8:
+                ttl_counts[ttl] = ttl_counts.get(ttl, 0) + 1
                 seq = struct.unpack('>H', packet_data[payload_start + 6:payload_start + 8])[0]
-                if seq not in probes_sent: probes_sent[seq] = {'times': [], 'ttl': ttl}
+                if seq not in probes_sent: 
+                    probes_sent[seq] = {'times': [], 'ttl': ttl}
                 probes_sent[seq]['times'].append(absolute_time)
 
         elif protocol == 1 and dst_ip == source_node:
@@ -185,4 +187,6 @@ if __name__ == '__main__':
     group_1_files = ['group1-trace1.pcap', 'group1-trace2.pcap', 'group1-trace3.pcap', 'group1-trace4.pcap', 'group1-trace5.pcap']
     group_2_files = ['group2-trace1.pcap', 'group2-trace2.pcap', 'group2-trace3.pcap', 'group2-trace4.pcap', 'group2-trace5.pcap']
 
-    analyze_r2_group('Group 2', group_1_files)
+    analyze_r2_group('Group 1', group_1_files)
+    analyze_r2_group('Group 2', group_2_files)
+
